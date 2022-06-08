@@ -1,1 +1,64 @@
 
+
+const {Router}=require("express");
+
+const groceryRouter=Router();
+const productRouter=Router();
+
+groceryRouter.get("/",(req,res)=>{
+    res.send("Grocery list:1,2,3,4");
+});
+
+productRouter.get("/",(req,res)=>{
+    res.send("Product list: kanda ,batata,tomato")
+})
+
+
+module.exports=groceryRouter;
+module.exports=productRouter;
+
+const express=require("express");
+const cors=require("cors");//is used to fetch these localhost data in anywhere
+
+// const groceryRouter=require("./groceries.route");
+// const productRouter=require("./groceries.route");
+
+const app=express();
+  
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
+app.use(cors()); //is allow to all website to fetch data
+// app.use(cors({
+//     origin:["https://new/csb.app"]      ///is allow only particular website to fetch data
+// }))
+
+// app.use("/groceries",groceryRouter);
+// app.use("/product",productRouter);
+
+
+
+
+
+
+app.use((req,res,next)=>{
+    console.log("Route:",req.url,"Method:",req.method,"At:",new Date());
+    next();
+})
+
+app.use((req,res,next)=>{
+    const t1=performance.now();
+    next();
+    const t2=performance.now();
+    console.log("time taken by",t2-t1);
+})
+
+ app.get("/",(req,res)=>{
+     res.end("Hello");
+ })
+ app.get("/list",(req,res)=>{
+     setTimeout(()=>{
+         res.send("Hello");
+     },1000);
+ })
+
+app.listen(8080);
